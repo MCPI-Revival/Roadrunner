@@ -7,7 +7,7 @@
  */
 
 #include <cstring>
-#include "./binary_stream.h"
+#include "./binary_stream.hpp"
 
 BinaryStream::BinaryStream() {
     this->buffer = (uint8_t *) malloc(0);
