@@ -9,3 +9,4 @@ MCPI-0.1.1/MCPE-0.6.1 server software to power event and minigame servers.
   - [ ] Optional word filtering.
   - [ ] Ratelimiting.
 - [ ] Support for more than one world.
+- [ ] rcon support?
