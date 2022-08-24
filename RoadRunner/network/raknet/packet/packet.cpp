@@ -1,4 +1,4 @@
-#include "packet.hpp"
+#include <network/raknet/packet/packet.hpp>
 #include <cstdlib>
 #include <cstring>
 #ifdef _WIN32

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../binary_stream.hpp"
-#include "../misc/internet_address.hpp"
+#include <binary_stream.hpp>
+#include <network/raknet/misc/internet_address.hpp>
 #include <iostream>
 
 class Packet : public BinaryStream {

@@ -1,4 +1,4 @@
-#include "magic.hpp"
+#include <network/raknet/misc/magic.hpp>
 
 uint8_t Magic::magic[16] = {
     0x00, 0xff, 0xff, 0x00,

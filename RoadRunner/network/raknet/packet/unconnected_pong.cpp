@@ -1,8 +1,11 @@
-#include <network/raknet/packet/unconnected_ping.hpp>
+#include <network/raknet/packet/unconnected_pong.hpp>
 #include <network/raknet/misc/magic.hpp>
 
-bool UnconnectedPing::deserialize_body() {
+bool UnconnectedPong::deserialize_body() {
     if (!this->read_u64be(&this->client_timestamp)) {
+        return false;
+    }
+    if (!this->read_u64be(&this->server_guid)) {
         return false;
     }
     uint8_t *magic;
@@ -12,10 +15,15 @@ bool UnconnectedPing::deserialize_body() {
     if (!Magic::validate_magic(magic)) {
         return false;
     }
+    if (!this->read_string(this->message)) {
+        return false;
+    }
     return true;
 }
 
-void UnconnectedPing::serialize_body() {
+bool UnconnectedPong::deserialize_body() {
     this->write_u64be(this->client_timestamp);
+    this->write_u64be(this->server_guid);
     this->write(Magic::magic, 16);
+    this->write_string(this->message);
 }
