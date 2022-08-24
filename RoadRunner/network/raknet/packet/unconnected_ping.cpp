@@ -1,5 +1,5 @@
-#include <network/raknet/packet/unconnected_ping.hpp>
 #include <network/raknet/misc/magic.hpp>
+#include <network/raknet/packet/unconnected_ping.hpp>
 
 bool UnconnectedPing::deserialize_body() {
     if (!this->read_u64be(&this->client_timestamp)) {

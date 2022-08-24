@@ -1,6 +1,6 @@
-#include <network/raknet/packet/packet.hpp>
 #include <cstdlib>
 #include <cstring>
+#include <network/raknet/packet/packet.hpp>
 #ifdef _WIN32
 #include <ws2tcpip.h>
 #else

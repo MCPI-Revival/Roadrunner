@@ -1,5 +1,5 @@
-#include <network/raknet/packet/unconnected_pong.hpp>
 #include <network/raknet/misc/magic.hpp>
+#include <network/raknet/packet/unconnected_pong.hpp>
 
 bool UnconnectedPong::deserialize_body() {
     if (!this->read_u64be(&this->client_timestamp)) {
@@ -21,7 +21,7 @@ bool UnconnectedPong::deserialize_body() {
     return true;
 }
 
-bool UnconnectedPong::deserialize_body() {
+void UnconnectedPong::serialize_body() {
     this->write_u64be(this->client_timestamp);
     this->write_u64be(this->server_guid);
     this->write(Magic::magic, 16);

@@ -1,5 +1,5 @@
-#include <network/raknet/packet/open_connection_request_one.hpp>
 #include <network/raknet/misc/magic.hpp>
+#include <network/raknet/packet/open_connection_request_one.hpp>
 
 bool OpenConnectionsRequestOne::deserialize_body() {
     uint8_t *magic;
@@ -12,7 +12,7 @@ bool OpenConnectionsRequestOne::deserialize_body() {
     if (!this->read_u8(&this->protocol_version)) {
         return false;
     }
-    this->mtu_size = ((uint16_t) (this->size & 0xffff));
+    this->mtu_size = ((uint16_t)(this->size & 0xffff));
     if (this->mtu_size != 0xffff) {
         this->mtu_size += 28;
     }
@@ -22,8 +22,8 @@ bool OpenConnectionsRequestOne::deserialize_body() {
 void OpenConnectionsRequestOne::serialize_body() {
     this->write(Magic::magic, 16);
     this->write_u8(this->protocol_version);
-    size_t size = ((size_t) this->mtu_size) - 46;
-    uint8_t *temp = (uint8_t *) calloc(size, 1);
+    size_t size = ((size_t)this->mtu_size) - 46;
+    uint8_t *temp = (uint8_t *)calloc(size, 1);
     this->write(temp, size);
     free(temp);
 }
