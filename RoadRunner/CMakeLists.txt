@@ -1,3 +1,11 @@
 project(roadrunner-core)
 
-add_executable(roadrunner-core main.cpp binary_stream.cpp)
+file(GLOB SOURCE_FILES
+    *.cpp
+    network/raknet/misc/*.cpp
+    network/raknet/packet/*.cpp
+)
+
+include_directories(.)
+
+add_executable(roadrunner-core ${SOURCE_FILES})

@@ -286,9 +286,8 @@ void BinaryStream::write_bool(bool input) {
 
 bool BinaryStream::read_varint32(uint32_t *output) {
     uint32_t value = 0;
-    uint8_t i;
     uint8_t to_read;
-    for (i = 0; i < 35; i += 7) {
+    for (uint8_t i = 0; i < 35; i += 7) {
         if (!this->read_u8(&to_read)) {
             return false;
         }
@@ -303,8 +302,7 @@ bool BinaryStream::read_varint32(uint32_t *output) {
 
 void BinaryStream::write_varint32(uint32_t input) {
     uint32_t value = input;
-    uint8_t i;
-    for (i = 0; i < 5; ++i) {
+    for (uint8_t i = 0; i < 5; ++i) {
         uint8_t to_write = (uint8_t)(value & 0x7f);
         value >>= 7;
         if (value != 0) {
@@ -333,9 +331,8 @@ void BinaryStream::write_zigzag32(int32_t input) {
 
 bool BinaryStream::read_varint64(uint64_t *output) {
     uint64_t value = 0;
-    uint8_t i;
     uint8_t to_read;
-    for (i = 0; i < 70; i += 7) {
+    for (uint8_t i = 0; i < 70; i += 7) {
         if (!this->read_u8(&to_read)) {
             return false;
         }
@@ -350,8 +347,7 @@ bool BinaryStream::read_varint64(uint64_t *output) {
 
 void BinaryStream::write_varint64(uint64_t input) {
     uint64_t value = input;
-    uint8_t i;
-    for (i = 0; i < 10; ++i) {
+    for (uint8_t i = 0; i < 10; ++i) {
         uint8_t to_write = (uint8_t)(value & 0x7f);
         value >>= 7;
         if (value != 0) {

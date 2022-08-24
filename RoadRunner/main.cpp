@@ -1,4 +1,4 @@
-#include "binary_stream.hpp"
+#include <iostream>
 
 int main() {
 }
