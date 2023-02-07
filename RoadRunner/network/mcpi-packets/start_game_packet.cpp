@@ -6,7 +6,7 @@ bool StartGamePacket::deserialize_body(RakNet::BitStream *stream) {
     if (!stream->Read<uint32_t>(this->seed)) {
         return false;
     }
-    if (!stream->Read<uint32_t>(this->generator_version)) {
+    if (!stream->Read<uint32_t>(this->forceHasResourse)) {
         return false;
     }
     if (!stream->Read<uint32_t>(this->gamemode)) {
@@ -29,7 +29,7 @@ bool StartGamePacket::deserialize_body(RakNet::BitStream *stream) {
 
 void StartGamePacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<uint32_t>(this->seed);
-    stream->Write<uint32_t>(this->generator_version);
+    stream->Write<uint32_t>(this->forceHasResourse);
     stream->Write<uint32_t>(this->gamemode);
     stream->Write<uint32_t>(this->entity_id);
     stream->Write<float>(this->x);

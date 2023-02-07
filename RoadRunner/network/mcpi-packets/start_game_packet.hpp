@@ -9,7 +9,7 @@ public:
     static const uint8_t packet_id;
 
     uint32_t seed;
-    uint32_t generator_version;
+    uint32_t forceHasResourse;
     uint32_t gamemode;
     uint32_t entity_id;
     float x;

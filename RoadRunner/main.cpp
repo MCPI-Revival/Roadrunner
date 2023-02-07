@@ -60,7 +60,7 @@ int main(void) {
 
                             StartGamePacket start_game;
                             start_game.seed = 0;
-                            start_game.generator_version = 0;
+                            start_game.forceHasResourse = 0;
                             start_game.gamemode = 1;
                             start_game.entity_id = 1;
                             start_game.x = 180.f;
