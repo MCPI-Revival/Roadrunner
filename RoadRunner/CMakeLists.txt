@@ -1,11 +1,6 @@
 project(roadrunner-core)
 
-file(GLOB SOURCE_FILES
-    *.cpp
-    network/mcpi-packets/*.cpp
-    network/raknet/misc/*.cpp
-    network/raknet/packet/*.cpp
-)
+file(GLOB_RECURSE SOURCE_FILES *.cpp)
 
 include_directories(.)
 include_directories(${RAKNET_INCLUDE_DIRS})
