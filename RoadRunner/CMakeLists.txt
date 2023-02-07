@@ -8,5 +8,7 @@ file(GLOB SOURCE_FILES
 )
 
 include_directories(.)
+include_directories(${RAKNET_INCLUDE_DIRS})
 
 add_executable(roadrunner-core ${SOURCE_FILES})
+target_link_libraries(roadrunner-core RakNetLibStatic)

@@ -1,20 +1,23 @@
 #include <network/mcpi-packets/login_packet.hpp>
 
-bool LoginPacket::deserialize_body() {
-    if (!this->read_string(this->username)) {
+const uint8_t LoginPacket::packet_id = 130;
+
+bool LoginPacket::deserialize_body(RakNet::BitStream *stream) {
+
+    if (!this->username.Deserialize(stream)) {
         return false;
     }
-    if (!this->read_i32be(&this->protocol_one)) {
+    if (!stream->Read<uint32_t>(this->protocol_one)) {
         return false;
     }
-    if (!this->read_i32be(&this->protocol_two)) {
+    if (!stream->Read<uint32_t>(this->protocol_two)) {
         return false;
     }
     return true;
 }
 
-void LoginPacket::serialize_body() {
-    this->write_string(this->username);
-    this->write_i32be(this->protocol_one);
-    this->write_i32be(this->protocol_two);
+void LoginPacket::serialize_body(RakNet::BitStream *stream) {
+    this->username.Serialize(stream);
+    stream->Write<uint32_t>(this->protocol_one);
+    stream->Write<uint32_t>(this->protocol_two);
 }

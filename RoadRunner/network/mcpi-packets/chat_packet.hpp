@@ -1,12 +1,16 @@
 #pragma once
 
-#include <network/raknet/packet/packet.hpp>
+#include <iostream>
+#include <stdint.h>
+#include <BitStream.h>
 
-class ChatPacket : public Packet {
+class ChatPacket {
 public:
-    std::string message;
+    static const uint8_t packet_id;
 
-    bool deserialize_body();
+    RakNet::RakString message;
 
-    void serialize_body();
+    bool deserialize_body(RakNet::BitStream *stream);
+
+    void serialize_body(RakNet::BitStream *stream);
 };

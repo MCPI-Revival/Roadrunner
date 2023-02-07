@@ -1,14 +1,18 @@
 #pragma once
 
-#include <network/raknet/packet/packet.hpp>
+#include <iostream>
+#include <stdint.h>
+#include <BitStream.h>
 
-class LoginPacket : public Packet {
+class LoginPacket {
 public:
-    std::string username;
-    int protocol_one;
-    int protocol_two;
+    static const uint8_t packet_id;
 
-    bool deserialize_body();
+    RakNet::RakString username;
+    uint32_t protocol_one;
+    uint32_t protocol_two;
 
-    void serialize_body();
+    bool deserialize_body(RakNet::BitStream *stream);
+
+    void serialize_body(RakNet::BitStream *stream);
 };

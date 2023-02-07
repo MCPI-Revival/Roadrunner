@@ -1,12 +1,12 @@
 #include <network/mcpi-packets/chat_packet.hpp>
+#include <stdint.h>
 
-bool ChatPacket::deserialize_body() {
-    if (!this->read_string(this->message)) {
-        return false;
-    }
-    return true;
+const uint8_t ChatPacket::packet_id = 180;
+
+bool ChatPacket::deserialize_body(RakNet::BitStream *stream) {
+    return this->message.Deserialize(stream);
 }
 
-void ChatPacket::serialize_body() {
-    this->write_string(this->message);
+void ChatPacket::serialize_body(RakNet::BitStream *stream) {
+    this->message.Serialize(stream);
 }

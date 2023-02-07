@@ -8,7 +8,7 @@ format:
 	clang-format -i -style=file $(shell find $(SOURCE_DIR) -name *.hpp -o -name *.cpp)
 
 .PHONY: build
-build: format
+build:
 	mkdir -p ${BUILD_DIR}
 	cd ${BUILD_DIR}; cmake ..; make
 

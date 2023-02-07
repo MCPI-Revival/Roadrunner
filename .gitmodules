@@ -1,0 +1,3 @@
+[submodule "RakNet-MCPI"]
+    path = RakNet-MCPI
+    url = https://github.com/MFDGaming/RakNet-MCPI
