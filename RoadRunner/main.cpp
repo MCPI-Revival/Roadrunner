@@ -6,12 +6,16 @@
 #include <BitStream.h>
 #include <stdint.h>
 #include <stdint.h>
-#include <network/mcpi-packets/start_game_packet.hpp>
-#include <network/mcpi-packets/login_status_packet.hpp>
-#include <network/mcpi-packets/login_packet.hpp>
+#include <network/packets/start_game_packet.hpp>
+#include <network/packets/login_status_packet.hpp>
+#include <network/packets/login_packet.hpp>
 
 #define MAX_CLIENTS 10
 #define SERVER_PORT 19132
+
+using RoadRunner::network::packets::StartGamePacket;
+using RoadRunner::network::packets::LoginStatusPacket;
+using RoadRunner::network::packets::LoginPacket;
 
 template <typename T> void send_packet(T& packet, RakNet::RakPeerInterface *peer, RakNet::RakNetGUID guid) {
     RakNet::BitStream send_stream;
@@ -61,7 +65,7 @@ int main(void) {
                             StartGamePacket start_game;
                             start_game.seed = 0;
                             start_game.forceHasResourse = 0;
-                            start_game.gamemode = 1;
+                            start_game.gamemode = 0;
                             start_game.entity_id = 1;
                             start_game.x = 180.f;
                             start_game.y = 72.f;

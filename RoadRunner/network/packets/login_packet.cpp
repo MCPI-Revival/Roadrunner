@@ -1,8 +1,8 @@
-#include <network/mcpi-packets/login_packet.hpp>
+#include <network/packets/login_packet.hpp>
 
-const uint8_t LoginPacket::packet_id = 130;
+const uint8_t RoadRunner::network::packets::LoginPacket::packet_id = 130;
 
-bool LoginPacket::deserialize_body(RakNet::BitStream *stream) {
+bool RoadRunner::network::packets::LoginPacket::deserialize_body(RakNet::BitStream *stream) {
 
     if (!this->username.Deserialize(stream)) {
         return false;
@@ -16,7 +16,7 @@ bool LoginPacket::deserialize_body(RakNet::BitStream *stream) {
     return true;
 }
 
-void LoginPacket::serialize_body(RakNet::BitStream *stream) {
+void RoadRunner::network::packets::LoginPacket::serialize_body(RakNet::BitStream *stream) {
     this->username.Serialize(stream);
     stream->Write<uint32_t>(this->protocol_one);
     stream->Write<uint32_t>(this->protocol_two);

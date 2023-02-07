@@ -1,8 +1,8 @@
-#include <network/mcpi-packets/start_game_packet.hpp>
+#include <network/packets/start_game_packet.hpp>
 
-const uint8_t StartGamePacket::packet_id = 135;
+const uint8_t RoadRunner::network::packets::StartGamePacket::packet_id = 135;
 
-bool StartGamePacket::deserialize_body(RakNet::BitStream *stream) {
+bool RoadRunner::network::packets::StartGamePacket::deserialize_body(RakNet::BitStream *stream) {
     if (!stream->Read<uint32_t>(this->seed)) {
         return false;
     }
@@ -27,7 +27,7 @@ bool StartGamePacket::deserialize_body(RakNet::BitStream *stream) {
     return true;
 }
 
-void StartGamePacket::serialize_body(RakNet::BitStream *stream) {
+void RoadRunner::network::packets::StartGamePacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<uint32_t>(this->seed);
     stream->Write<uint32_t>(this->forceHasResourse);
     stream->Write<uint32_t>(this->gamemode);
