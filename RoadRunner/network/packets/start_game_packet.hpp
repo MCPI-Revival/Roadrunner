@@ -11,10 +11,10 @@ namespace RoadRunner {
             public:
                 static const uint8_t packet_id;
 
-                uint32_t seed;
-                uint32_t forceHasResourse;
-                uint32_t gamemode;
-                uint32_t entity_id;
+                int32_t seed;
+                int32_t forceHasResourse;
+                int32_t gamemode;
+                int32_t entity_id;
                 float x;
                 float y;
                 float z;

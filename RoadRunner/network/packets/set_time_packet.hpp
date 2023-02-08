@@ -11,7 +11,7 @@ namespace RoadRunner {
             public:
                 static const uint8_t packet_id;
 
-                uint32_t time;
+                int32_t time;
 
                 bool deserialize_body(RakNet::BitStream *stream);
 
