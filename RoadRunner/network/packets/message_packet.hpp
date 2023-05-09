@@ -1,8 +1,8 @@
 #pragma once
 
+#include <BitStream.h>
 #include <iostream>
 #include <stdint.h>
-#include <BitStream.h>
 
 namespace RoadRunner {
     namespace network {

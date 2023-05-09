@@ -1,8 +1,8 @@
 #pragma once
 
 #include <BitStream.h>
-#include <map>
 #include <cstdint>
+#include <map>
 
 typedef struct {
     int16_t block;
