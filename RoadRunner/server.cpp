@@ -1,9 +1,25 @@
-#include <server.hpp>
 #include <BitStream.h>
 #include <MessageIdentifiers.h>
 #include <PacketPriority.h>
 
-RoadRunner::Server::Server(uint16_t port, uint32_t max_clients) {
+#include <network/packets/message_packet.hpp>
+#include <server.hpp>
+
+using RoadRunner::Server;
+using RoadRunner::network::packets::MessagePacket;
+
+void Server::post_to_chat(std::string message) {
+    MessagePacket msg;
+    msg.message = message.c_str();
+    RakNet::BitStream send_stream;
+    send_stream.Write<uint8_t>(msg.packet_id);
+    msg.serialize_body(&send_stream);
+    for (auto const &client : this->players) {
+        this->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, client.first, false);
+    }
+}
+
+Server::Server(uint16_t port, uint32_t max_clients) {
     this->peer = RakNet::RakPeerInterface::GetInstance();
 
     RakNet::Packet *packet;
@@ -30,6 +46,7 @@ RoadRunner::Server::Server(uint16_t port, uint32_t max_clients) {
                 if (this->players.count(packet->guid) == 0) {
                     RoadRunner::Player *player = new RoadRunner::Player();
                     player->guid = packet->guid;
+                    player->entity_id = this->players.size() + 1;
                     player->server = this;
                     this->players[packet->guid] = player;
                 }
@@ -40,7 +57,11 @@ RoadRunner::Server::Server(uint16_t port, uint32_t max_clients) {
             case ID_DISCONNECTION_NOTIFICATION:
                 printf("A client has disconnected.\n");
                 if (this->players.count(packet->guid) != 0) {
+                    std::string message =
+                        this->players[packet->guid]->username + " has left the game";
                     this->players.erase(packet->guid);
+                    puts(message.c_str());
+                    this->post_to_chat(message);
                 }
                 break;
             case ID_CONNECTION_LOST:
