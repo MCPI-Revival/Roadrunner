@@ -18,6 +18,8 @@ namespace RoadRunner {
         float x = SPAWN_X;
         float y = SPAWN_Y;
         float z = SPAWN_Z;
+        float yaw = 0;
+        float pitch = 0;
         int entity_id = 0;
 
         template <typename T>

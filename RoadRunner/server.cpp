@@ -14,8 +14,10 @@ void Server::post_to_chat(std::string message) {
     RakNet::BitStream send_stream;
     send_stream.Write<uint8_t>(msg.packet_id);
     msg.serialize_body(&send_stream);
-    for (auto const &client : this->players) {
-        this->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, client.first, false);
+    std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->players.begin();
+    while (it != this->players.end()) {
+        this->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, it->first, false);
+        ++it;
     }
 }
 

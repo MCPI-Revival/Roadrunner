@@ -31,5 +31,4 @@ void RoadRunner::network::packets::MovePlayerPacket::serialize_body(RakNet::BitS
     stream->Write<float>(this->z);
     stream->Write<float>(this->pitch);
     stream->Write<float>(this->yaw);
-    this->metadata.serialize(stream);
 }

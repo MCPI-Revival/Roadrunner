@@ -1,17 +1,21 @@
 #include <config.hpp>
+#include <network/packets/add_player_packet.hpp>
 #include <network/packets/chat_packet.hpp>
 #include <network/packets/login_packet.hpp>
 #include <network/packets/login_status_packet.hpp>
 #include <network/packets/message_packet.hpp>
 #include <network/packets/move_player_packet.hpp>
+#include <network/packets/ready_packet.hpp>
 #include <network/packets/start_game_packet.hpp>
 #include <player.hpp>
 
+using RoadRunner::network::packets::AddPlayerPacket;
 using RoadRunner::network::packets::ChatPacket;
 using RoadRunner::network::packets::LoginPacket;
 using RoadRunner::network::packets::LoginStatusPacket;
 using RoadRunner::network::packets::MessagePacket;
 using RoadRunner::network::packets::MovePlayerPacket;
+using RoadRunner::network::packets::ReadyPacket;
 using RoadRunner::network::packets::StartGamePacket;
 
 template <typename T>
@@ -29,8 +33,10 @@ void RoadRunner::Player::broadcast_packet(T &packet) {
     RakNet::BitStream send_stream;
     send_stream.Write<uint8_t>(packet.packet_id);
     packet.serialize_body(&send_stream);
-    for (auto const &guid : this->server->players) {
-        this->server->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, guid.first, false);
+    std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->server->players.begin();
+    while (it != this->server->players.end()) {
+        this->server->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, it->first, false);
+        ++it;
     }
 }
 
@@ -40,9 +46,11 @@ void RoadRunner::Player::broadcast_except_packet(T &packet) {
     RakNet::BitStream send_stream;
     send_stream.Write<uint8_t>(packet.packet_id);
     packet.serialize_body(&send_stream);
-    for (auto const &guid : this->server->players) {
-        if (guid.first == this->guid) continue;
-        this->server->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, guid.first, false);
+    std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->server->players.begin();
+    while (it != this->server->players.end()) {
+        if (it->first == this->guid) continue;
+        this->server->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, it->first, false);
+        ++it;
     }
 }
 
@@ -51,7 +59,6 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         LoginPacket login;
         login.deserialize_body(stream);
         this->username = login.username.C_String();
-        printf("%s has joined the game\n", login.username.C_String());
 
         // Continue the login sequence
         LoginStatusPacket login_status;
@@ -67,9 +74,39 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         start_game.y = SPAWN_Y;
         start_game.z = SPAWN_Z;
         this->send_packet(start_game);
-
-        // Sent the join message in chat
+    } else if (packet_id == ReadyPacket::packet_id) {
+        ReadyPacket ready_packet;
+        ready_packet.deserialize_body(stream);
+        if (ready_packet.status != 1) return;
+        // Join game message
+        printf("%s has joined the game\n", this->username.c_str());
         this->server->post_to_chat(this->username + " has joined!");
+        // Add the player
+        AddPlayerPacket add_player;
+        add_player.client_guid = 0;
+        add_player.username = this->username.c_str();
+        add_player.entity_id = this->entity_id;
+        add_player.x = this->x;
+        add_player.y = this->y;
+        add_player.z = this->z;
+        add_player.pitch = this->pitch;
+        add_player.yaw = this->yaw;
+        this->broadcast_except_packet(add_player);
+        // Add the other players
+        std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->server->players.begin();
+        while (it != this->server->players.end()) {
+            if (it->first == this->guid) continue;
+            Player *player = it->second;
+            add_player.username = player->username.c_str();
+            add_player.entity_id = player->entity_id + 1;
+            add_player.x = player->x;
+            add_player.y = player->y;
+            add_player.z = player->z;
+            add_player.pitch = player->pitch;
+            add_player.yaw = player->yaw;
+            this->send_packet(add_player);
+            ++it;
+        }
     } else if (packet_id == ChatPacket::packet_id || packet_id == MessagePacket::packet_id) {
         // WARN: Currently MessagePacket and ChatPacket are identical save the id
         // if that were to change then this needs to change accordingly
@@ -130,5 +167,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         this->x = move_player.x;
         this->y = move_player.y;
         this->z = move_player.z;
+        this->pitch = move_player.pitch;
+        this->yaw = move_player.yaw;
     }
 }
