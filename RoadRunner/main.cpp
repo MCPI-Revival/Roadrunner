@@ -1,7 +1,5 @@
 #include <server.hpp>
-
-#define MAX_CLIENTS 10
-#define SERVER_PORT 19132
+#include <config.hpp>
 
 using RoadRunner::Server;
 

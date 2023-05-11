@@ -3,6 +3,7 @@
 #include <RakPeerInterface.h>
 #include <cstdint>
 #include <map>
+#include <vector>
 #include <player.hpp>
 
 namespace RoadRunner {
@@ -12,8 +13,10 @@ namespace RoadRunner {
     public:
         RakNet::RakPeerInterface *peer;
         std::map<RakNet::RakNetGUID, RoadRunner::Player *> players;
+        std::vector<uint8_t> ids;
 
         Server(uint16_t port, uint32_t max_clients);
         void post_to_chat(std::string message);
+        uint32_t get_player_id();
     };
 }
