@@ -5,6 +5,8 @@
 #include <network/packets/message_packet.hpp>
 #include <network/packets/move_player_packet.hpp>
 #include <network/packets/start_game_packet.hpp>
+#include <network/packets/request_chunk_packet.hpp>
+#include <network/packets/chunk_data_packet.hpp>
 #include <player.hpp>
 
 using RoadRunner::network::packets::ChatPacket;
@@ -13,6 +15,8 @@ using RoadRunner::network::packets::LoginStatusPacket;
 using RoadRunner::network::packets::MessagePacket;
 using RoadRunner::network::packets::MovePlayerPacket;
 using RoadRunner::network::packets::StartGamePacket;
+using RoadRunner::network::packets::RequestChunkPacket;
+using RoadRunner::network::packets::ChunkDataPacket;
 
 template <typename T>
 void RoadRunner::Player::send_packet(T &packet) {
@@ -130,5 +134,22 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         this->x = move_player.x;
         this->y = move_player.y;
         this->z = move_player.z;
+    } else if (packet_id == RequestChunkPacket::packet_id) {
+        RequestChunkPacket request_chunk;
+        request_chunk.deserialize_body(stream);
+
+        ChunkDataPacket chunk_data;
+        chunk_data.x = request_chunk.x;
+        chunk_data.z = request_chunk.z;
+        chunk_data.chunk = new RoadRunner::world::Chunk(chunk_data.x, chunk_data.z);
+        for (int32_t x = 0; x < 16; ++x) {
+            for (int32_t z = 0; z < 16; ++z) {
+                chunk_data.chunk->set_block_id(x, 0, z, 7);
+                chunk_data.chunk->set_block_id(x, 1, z, 3);
+                chunk_data.chunk->set_block_id(x, 2, z, 3);
+                chunk_data.chunk->set_block_id(x, 3, z, 2);
+            }
+        }
+        this->send_packet(chunk_data);
     }
 }
