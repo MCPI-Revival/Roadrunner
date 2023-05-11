@@ -31,7 +31,7 @@ bool RoadRunner::network::packets::ChunkDataPacket::deserialize_body(RakNet::Bit
                         if(!stream->ReadAlignedBytes(block_metas, 8)) {
                             return false;
                         }
-                        memcpy(&this->chunk->block_metas[index], block_metas, 8);
+                        memcpy(&this->chunk->block_metas[index >> 1], block_metas, 8);
                     }
                 }
             }

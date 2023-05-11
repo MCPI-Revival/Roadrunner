@@ -10,6 +10,7 @@
 #include <network/packets/request_chunk_packet.hpp>
 #include <network/packets/chunk_data_packet.hpp>
 #include <player.hpp>
+#include <world/perlin.hpp>
 
 using RoadRunner::network::packets::AddPlayerPacket;
 using RoadRunner::network::packets::ChatPacket;
@@ -21,6 +22,7 @@ using RoadRunner::network::packets::ReadyPacket;
 using RoadRunner::network::packets::StartGamePacket;
 using RoadRunner::network::packets::RequestChunkPacket;
 using RoadRunner::network::packets::ChunkDataPacket;
+using RoadRunner::world::Perlin;
 
 template <typename T>
 void RoadRunner::Player::send_packet(T &packet) {
@@ -187,12 +189,38 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         chunk_data.x = request_chunk.x;
         chunk_data.z = request_chunk.z;
         chunk_data.chunk = new RoadRunner::world::Chunk(chunk_data.x, chunk_data.z);
+        Perlin perlin;
+        int32_t seed = 3;
         for (int32_t x = 0; x < 16; ++x) {
             for (int32_t z = 0; z < 16; ++z) {
-                chunk_data.chunk->set_block_id(x, 0, z, 7);
-                chunk_data.chunk->set_block_id(x, 1, z, 3);
-                chunk_data.chunk->set_block_id(x, 2, z, 3);
-                chunk_data.chunk->set_block_id(x, 3, z, 2);
+                int32_t y = (int32_t)perlin.perlin(((chunk_data.x << 4) + x), ((chunk_data.z << 4) + z), 10.0 * (float)seed, 1, 8, 4, 0.4, 2) + 62;
+
+                int32_t start_point = y;
+                while (y >= 0) {
+                    if (y < 1 && y >= 0) {
+                        chunk_data.chunk->set_block_id(x, y, z, 7);
+                    } else if (y < start_point && y > start_point - 4) {
+                        if (y > 60) {
+                            chunk_data.chunk->set_block_id(x, y, z, 3);
+                        } else {
+                            chunk_data.chunk->set_block_id(x, y, z, 13);
+                        }
+                    } else if (y == start_point) {
+                        if (y > 61) {
+                            chunk_data.chunk->set_block_id(x, y, z, 2);
+                        } else {
+                            chunk_data.chunk->set_block_id(x, y, z, 13);
+                        }
+                    } else {
+                        chunk_data.chunk->set_block_id(x, y, z, 1);
+                    }
+                    --y;
+                }
+                for (int32_t i = 0; i < 62; ++i) {
+                    if (chunk_data.chunk->get_block_id(x, i, z) == 0) {
+                        chunk_data.chunk->set_block_id(x, i, z, 9);
+                    }
+                }
             }
         }
         this->send_packet(chunk_data);
