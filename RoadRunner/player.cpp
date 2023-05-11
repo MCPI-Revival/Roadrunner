@@ -177,7 +177,8 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         this->x = move_player.x;
         this->y = move_player.y;
         this->z = move_player.z;
-<<<<<<< HEAD
+        this->pitch = move_player.pitch;
+        this->yaw = move_player.yaw;
     } else if (packet_id == RequestChunkPacket::packet_id) {
         RequestChunkPacket request_chunk;
         request_chunk.deserialize_body(stream);
@@ -195,9 +196,5 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
             }
         }
         this->send_packet(chunk_data);
-=======
-        this->pitch = move_player.pitch;
-        this->yaw = move_player.yaw;
->>>>>>> refs/remotes/origin/master
     }
 }
