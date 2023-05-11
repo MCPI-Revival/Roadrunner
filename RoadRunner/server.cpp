@@ -23,7 +23,8 @@ void Server::post_to_chat(std::string message) {
 
 uint32_t Server::get_player_id() {
     uint32_t i = 0;
-    while (this->ids[i]) ++i;
+    while (this->ids[i])
+        ++i;
     return i;
 }
 

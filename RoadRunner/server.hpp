@@ -3,8 +3,8 @@
 #include <RakPeerInterface.h>
 #include <cstdint>
 #include <map>
-#include <vector>
 #include <player.hpp>
+#include <vector>
 
 namespace RoadRunner {
     class Player;

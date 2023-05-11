@@ -1,5 +1,5 @@
-#include <server.hpp>
 #include <config.hpp>
+#include <server.hpp>
 
 using RoadRunner::Server;
 
