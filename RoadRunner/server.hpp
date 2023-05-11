@@ -13,7 +13,8 @@ namespace RoadRunner {
     public:
         RakNet::RakPeerInterface *peer;
         std::map<RakNet::RakNetGUID, RoadRunner::Player *> players;
-        std::vector<uint8_t> ids;
+        int32_t entity_id;
+        std::vector<int32_t> reuseable_entity_ids;
 
         Server(uint16_t port, uint32_t max_clients);
         void post_to_chat(std::string message);

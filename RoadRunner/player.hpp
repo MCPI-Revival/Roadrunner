@@ -20,7 +20,7 @@ namespace RoadRunner {
         float z = SPAWN_Z;
         float yaw = 0;
         float pitch = 0;
-        int entity_id = 0;
+        int32_t entity_id = 0;
 
         template <typename T>
         void send_packet(T &packet);

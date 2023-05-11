@@ -21,14 +21,8 @@ void Server::post_to_chat(std::string message) {
     }
 }
 
-uint32_t Server::get_player_id() {
-    uint32_t i = 0;
-    while (this->ids[i])
-        ++i;
-    return i;
-}
-
 Server::Server(uint16_t port, uint32_t max_clients) {
+    this->entity_id = 1;
     this->peer = RakNet::RakPeerInterface::GetInstance();
 
     RakNet::Packet *packet;
@@ -39,8 +33,6 @@ Server::Server(uint16_t port, uint32_t max_clients) {
     printf("Starting the server.\n");
 
     peer->SetMaximumIncomingConnections(max_clients);
-
-    this->ids.resize(max_clients, false);
 
     while (1) {
         packet = peer->Receive();
@@ -57,7 +49,12 @@ Server::Server(uint16_t port, uint32_t max_clients) {
                 if (this->players.count(packet->guid) == 0) {
                     RoadRunner::Player *player = new RoadRunner::Player();
                     player->guid = packet->guid;
-                    player->entity_id = this->get_player_id() + 1;
+                    if (this->reuseable_entity_ids.size()) {
+                        player->entity_id = this->reuseable_entity_ids.back();
+                        this->reuseable_entity_ids.pop_back();
+                    } else {
+                        player->entity_id = this->entity_id++;
+                    }
                     player->server = this;
                     this->players[packet->guid] = player;
                 }
@@ -69,7 +66,7 @@ Server::Server(uint16_t port, uint32_t max_clients) {
                 printf("A client has disconnected.\n");
                 if (this->players.count(packet->guid) != 0) {
                     Player *player = this->players[packet->guid];
-                    this->ids[player->entity_id - 1] = false;
+                    this->reuseable_entity_ids.push_back(player->entity_id);
                     std::string message = player->username + " has left the game";
                     this->players.erase(packet->guid);
                     puts(message.c_str());
@@ -79,7 +76,12 @@ Server::Server(uint16_t port, uint32_t max_clients) {
             case ID_CONNECTION_LOST:
                 printf("A client lost the connection.\n");
                 if (this->players.count(packet->guid) != 0) {
+                    Player *player = this->players[packet->guid];
+                    this->reuseable_entity_ids.push_back(player->entity_id);
+                    std::string message = player->username + " has left the game";
                     this->players.erase(packet->guid);
+                    puts(message.c_str());
+                    this->post_to_chat(message);
                 }
                 break;
             default:
