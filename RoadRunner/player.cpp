@@ -48,7 +48,10 @@ void RoadRunner::Player::broadcast_except_packet(T &packet) {
     packet.serialize_body(&send_stream);
     std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->server->players.begin();
     while (it != this->server->players.end()) {
-        if (it->first == this->guid) continue;
+        if (it->first == this->guid) {
+            ++it;
+            continue;
+        }
         this->server->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, it->first, false);
         ++it;
     }
@@ -95,7 +98,10 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         // Add the other players
         std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->server->players.begin();
         while (it != this->server->players.end()) {
-            if (it->first == this->guid) continue;
+            if (it->first == this->guid) {
+                ++it;
+                continue;
+            }
             Player *player = it->second;
             add_player.username = player->username.c_str();
             add_player.entity_id = player->entity_id + 1;
