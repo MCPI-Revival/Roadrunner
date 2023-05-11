@@ -14,9 +14,18 @@ void Server::post_to_chat(std::string message) {
     RakNet::BitStream send_stream;
     send_stream.Write<uint8_t>(msg.packet_id);
     msg.serialize_body(&send_stream);
-    for (auto const &client : this->players) {
-        this->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, client.first, false);
+    std::map<const RakNet::RakNetGUID, RoadRunner::Player *>::iterator it = this->players.begin();
+    while (it != this->players.end()) {
+        this->peer->Send(&send_stream, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, it->first, false);
+        ++it;
     }
+}
+
+uint32_t Server::get_player_id() {
+    uint32_t i = 0;
+    while (this->ids[i])
+        ++i;
+    return i;
 }
 
 Server::Server(uint16_t port, uint32_t max_clients) {
@@ -30,6 +39,8 @@ Server::Server(uint16_t port, uint32_t max_clients) {
     printf("Starting the server.\n");
 
     peer->SetMaximumIncomingConnections(max_clients);
+
+    this->ids.resize(max_clients, false);
 
     while (1) {
         packet = peer->Receive();
@@ -46,7 +57,7 @@ Server::Server(uint16_t port, uint32_t max_clients) {
                 if (this->players.count(packet->guid) == 0) {
                     RoadRunner::Player *player = new RoadRunner::Player();
                     player->guid = packet->guid;
-                    player->entity_id = this->players.size() + 1;
+                    player->entity_id = this->get_player_id() + 1;
                     player->server = this;
                     this->players[packet->guid] = player;
                 }
@@ -57,8 +68,9 @@ Server::Server(uint16_t port, uint32_t max_clients) {
             case ID_DISCONNECTION_NOTIFICATION:
                 printf("A client has disconnected.\n");
                 if (this->players.count(packet->guid) != 0) {
-                    std::string message =
-                        this->players[packet->guid]->username + " has left the game";
+                    Player *player = this->players[packet->guid];
+                    this->ids[player->entity_id - 1] = false;
+                    std::string message = player->username + " has left the game";
                     this->players.erase(packet->guid);
                     puts(message.c_str());
                     this->post_to_chat(message);
