@@ -12,8 +12,8 @@ bool RoadRunner::network::packets::ChunkDataPacket::deserialize_body(RakNet::Bit
         return false;
     }
     this->chunk = new Chunk(this->x, this->z);
-    for (int32_t x = 0; x < 16; ++x) {
-        for (int32_t z = 0; z < 16; ++z) {
+    for (int32_t z = 0; z < 16; ++z) {
+        for (int32_t x = 0; x < 16; ++x) {
             uint8_t flags;
             if (!stream->Read<uint8_t>(flags)) {
                 return false;
@@ -44,8 +44,8 @@ void RoadRunner::network::packets::ChunkDataPacket::serialize_body(RakNet::BitSt
     stream->Write<int32_t>(this->x);
     stream->Write<int32_t>(this->z);
     if (this->chunk != NULL) {
-        for (int32_t x = 0; x < 16; ++x) {
-            for (int32_t z = 0; z < 16; ++z) {
+        for (int32_t z = 0; z < 16; ++z) {
+            for (int32_t x = 0; x < 16; ++x) {
                 stream->Write<uint8_t>(0xffu);
                 for (uint8_t y = 0; y < 8; ++y) {
                     uint32_t index = COORDS_TO_INDEX(x, y << 4, z);
