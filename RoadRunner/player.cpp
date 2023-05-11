@@ -104,7 +104,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
             }
             Player *player = it->second;
             add_player.username = player->username.c_str();
-            add_player.entity_id = player->entity_id + 1;
+            add_player.entity_id = player->entity_id;
             add_player.x = player->x;
             add_player.y = player->y;
             add_player.z = player->z;
