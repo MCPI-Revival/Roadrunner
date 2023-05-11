@@ -50,7 +50,7 @@ void RoadRunner::network::packets::ChunkDataPacket::serialize_body(RakNet::BitSt
                 for (uint8_t y = 0; y < 8; ++y) {
                     uint32_t index = COORDS_TO_INDEX(x, y << 4, z);
                     stream->WriteAlignedBytes(&this->chunk->block_ids[index], 16);
-                    stream->WriteAlignedBytes(&this->chunk->block_metas[index], 8);
+                    stream->WriteAlignedBytes(&this->chunk->block_metas[index >> 1], 8);
                 }
             }
         }
