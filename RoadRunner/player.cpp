@@ -68,6 +68,9 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         LoginPacket login;
         login.deserialize_body(stream);
         this->username = login.username.C_String();
+        this->x = SPAWN_X;
+        this->y = SPAWN_Y;
+        this->z = SPAWN_Z;
 
         // Continue the login sequence
         LoginStatusPacket login_status;

@@ -34,6 +34,7 @@ Server::Server(uint16_t port, uint32_t max_clients) {
 
     peer->SetMaximumIncomingConnections(max_clients);
 
+    EntityIDGenerator idGen;
     while (1) {
         packet = peer->Receive();
         if (!packet) continue;
@@ -47,7 +48,7 @@ Server::Server(uint16_t port, uint32_t max_clients) {
             case ID_NEW_INCOMING_CONNECTION:
                 printf("A new connection is incoming.\n");
                 if (this->players.count(packet->guid) == 0) {
-                    RoadRunner::Player *player = new RoadRunner::Player();
+                    RoadRunner::Player *player = new RoadRunner::Player(this, &idGen);
                     player->guid = packet->guid;
                     if (this->reuseable_entity_ids.size()) {
                         player->entity_id = this->reuseable_entity_ids.back();
@@ -55,7 +56,6 @@ Server::Server(uint16_t port, uint32_t max_clients) {
                     } else {
                         player->entity_id = this->entity_id++;
                     }
-                    player->server = this;
                     this->players[packet->guid] = player;
                 }
                 break;
