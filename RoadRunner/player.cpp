@@ -1,27 +1,31 @@
 #include <config.hpp>
 #include <network/packets/add_player_packet.hpp>
+#include <network/packets/animate_packet.hpp>
 #include <network/packets/chat_packet.hpp>
+#include <network/packets/chunk_data_packet.hpp>
 #include <network/packets/login_packet.hpp>
 #include <network/packets/login_status_packet.hpp>
 #include <network/packets/message_packet.hpp>
 #include <network/packets/move_player_packet.hpp>
+#include <network/packets/player_equipment_packet.hpp>
 #include <network/packets/ready_packet.hpp>
-#include <network/packets/start_game_packet.hpp>
 #include <network/packets/request_chunk_packet.hpp>
-#include <network/packets/chunk_data_packet.hpp>
+#include <network/packets/start_game_packet.hpp>
 #include <player.hpp>
 #include <world/perlin.hpp>
 
 using RoadRunner::network::packets::AddPlayerPacket;
+using RoadRunner::network::packets::AnimatePacket;
 using RoadRunner::network::packets::ChatPacket;
+using RoadRunner::network::packets::ChunkDataPacket;
 using RoadRunner::network::packets::LoginPacket;
 using RoadRunner::network::packets::LoginStatusPacket;
 using RoadRunner::network::packets::MessagePacket;
 using RoadRunner::network::packets::MovePlayerPacket;
+using RoadRunner::network::packets::PlayerEquipmentPacket;
 using RoadRunner::network::packets::ReadyPacket;
-using RoadRunner::network::packets::StartGamePacket;
 using RoadRunner::network::packets::RequestChunkPacket;
-using RoadRunner::network::packets::ChunkDataPacket;
+using RoadRunner::network::packets::StartGamePacket;
 using RoadRunner::world::Perlin;
 
 template <typename T>
@@ -132,6 +136,17 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         // Send
         msg.message = formatted.c_str();
         this->broadcast_packet(msg);
+    } else if (packet_id == AnimatePacket::packet_id) {
+        AnimatePacket animate;
+        animate.deserialize_body(stream);
+        animate.entity_id = this->entity_id;
+        this->broadcast_packet(animate);
+    } else if (packet_id == PlayerEquipmentPacket::packet_id) {
+        // TODO: Check validity of item
+        PlayerEquipmentPacket player_equipment;
+        player_equipment.deserialize_body(stream);
+        player_equipment.entity_id = this->entity_id;
+        this->broadcast_packet(player_equipment);
     } else if (packet_id == MovePlayerPacket::packet_id) {
         MovePlayerPacket move_player;
         move_player.deserialize_body(stream);
