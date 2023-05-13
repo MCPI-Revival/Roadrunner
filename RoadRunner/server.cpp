@@ -63,25 +63,11 @@ Server::Server(uint16_t port, uint32_t max_clients) {
                 printf("The server is full.\n");
                 break;
             case ID_DISCONNECTION_NOTIFICATION:
-                printf("A client has disconnected.\n");
-                if (this->players.count(packet->guid) != 0) {
-                    Player *player = this->players[packet->guid];
-                    this->reuseable_entity_ids.push_back(player->entity_id);
-                    std::string message = player->username + " has left the game";
-                    this->players.erase(packet->guid);
-                    puts(message.c_str());
-                    this->post_to_chat(message);
-                }
-                break;
             case ID_CONNECTION_LOST:
                 printf("A client lost the connection.\n");
                 if (this->players.count(packet->guid) != 0) {
-                    Player *player = this->players[packet->guid];
-                    this->reuseable_entity_ids.push_back(player->entity_id);
-                    std::string message = player->username + " has left the game";
+                    delete this->players[packet->guid];
                     this->players.erase(packet->guid);
-                    puts(message.c_str());
-                    this->post_to_chat(message);
                 }
                 break;
             default:

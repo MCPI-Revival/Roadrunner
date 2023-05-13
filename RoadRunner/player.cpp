@@ -9,6 +9,7 @@
 #include <network/packets/move_player_packet.hpp>
 #include <network/packets/player_equipment_packet.hpp>
 #include <network/packets/ready_packet.hpp>
+#include <network/packets/remove_player_packet.hpp>
 #include <network/packets/request_chunk_packet.hpp>
 #include <network/packets/start_game_packet.hpp>
 #include <player.hpp>
@@ -24,6 +25,7 @@ using RoadRunner::network::packets::MessagePacket;
 using RoadRunner::network::packets::MovePlayerPacket;
 using RoadRunner::network::packets::PlayerEquipmentPacket;
 using RoadRunner::network::packets::ReadyPacket;
+using RoadRunner::network::packets::RemovePlayerPacket;
 using RoadRunner::network::packets::RequestChunkPacket;
 using RoadRunner::network::packets::StartGamePacket;
 using RoadRunner::world::Perlin;
@@ -243,4 +245,18 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         }
         this->send_packet(chunk_data);
     }
+}
+
+RoadRunner::Player::~Player() {
+    // Remove
+    RemovePlayerPacket rm_player;
+    rm_player.entity_id = this->entity_id;
+    rm_player.client_guid = 0;
+    this->broadcast_packet(rm_player);
+    // Log/chat
+    std::string msg = this->username + " has left the game";
+    puts(msg.c_str());
+    this->server->post_to_chat(msg.c_str());
+    // Call superclass deconstructor
+    Entity::~Entity();
 }

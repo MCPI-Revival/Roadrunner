@@ -4,8 +4,8 @@
 
 #include <BitStream.h>
 #include <config.hpp>
-#include <server.hpp>
 #include <entity.hpp>
+#include <server.hpp>
 
 namespace RoadRunner {
     class Server;
@@ -25,6 +25,9 @@ namespace RoadRunner {
         void handle_packet(uint8_t packet_id, RakNet::BitStream *stream);
 
         Player(Server *server, EntityIDGenerator *idGenerator)
-            : Entity(server, idGenerator) {}
+            : Entity(server, idGenerator) {
+        }
+
+        ~Player();
     };
 }

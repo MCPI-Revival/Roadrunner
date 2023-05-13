@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 namespace RoadRunner {
     class Server;
@@ -9,11 +9,11 @@ namespace RoadRunner {
     class EntityIDGenerator {
         std::vector<int32_t> free_ids = {};
         int32_t count = 0;
+
     public:
         int32_t alloc();
         void free(int32_t id);
     };
-
 
     class Entity {
     public:
@@ -27,9 +27,8 @@ namespace RoadRunner {
         float pitch = 0;
         int32_t entity_id = 0;
 
-        Entity(Server *server, EntityIDGenerator *idGenerator) :
-            server(server), idGenerator(idGenerator)
-        {
+        Entity(Server *server, EntityIDGenerator *idGenerator)
+            : server(server), idGenerator(idGenerator) {
             entity_id = idGenerator->alloc();
         }
 
