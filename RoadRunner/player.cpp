@@ -210,10 +210,12 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         chunk_data.z = request_chunk.z;
         chunk_data.chunk = new RoadRunner::world::Chunk(chunk_data.x, chunk_data.z);
         Perlin perlin;
-        int32_t seed = 3;
+        int32_t seed = 0;
+        
         for (int32_t x = 0; x < 16; ++x) {
             for (int32_t z = 0; z < 16; ++z) {
-                int32_t y = (int32_t)perlin.perlin(((chunk_data.x << 4) + x), ((chunk_data.z << 4) + z), 10.0 * (float)seed, 1, 8, 4, 0.4, 2) + 62;
+                int32_t y = (int32_t)perlin.perlin(((chunk_data.x << 4) + x), ((chunk_data.z << 4) + z), 10.0 * (float)seed, 1, 1, 1, 0.2, 2) + 62;
+
 
                 int32_t start_point = y;
                 while (y >= 0) {
@@ -236,7 +238,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
                     }
                     --y;
                 }
-                for (int32_t i = 0; i < 62; ++i) {
+                for (int32_t i = 0; i < 63; ++i) {
                     if (chunk_data.chunk->get_block_id(x, i, z) == 0) {
                         chunk_data.chunk->set_block_id(x, i, z, 9);
                     }

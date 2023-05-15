@@ -10,9 +10,11 @@ namespace RoadRunner {
 
             Perlin();
 
+            float grad(int32_t hash, float x, float y, float z);
+
             float noise(float x, float y, float z);
 
-            float perlin(float x, float y, float z, uint32_t r, float scale, uint32_t octaves, float persistence, float lacunarity);
+            float perlin(float x, float y, float z, int32_t r, float scale, int32_t octaves, float persistence, float lacunarity);
         };
     }
 }
