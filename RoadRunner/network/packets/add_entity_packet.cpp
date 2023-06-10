@@ -25,11 +25,11 @@ bool RoadRunner::network::packets::AddEntityPacket::deserialize_body(RakNet::Bit
         return false;
     }
     if (!stream->Read<int16_t>(this->speed_y)) {
-		return false;
-	}
+	return false;
+    }
     if (!stream->Read<int16_t>(this->speed_z)) {
-		return false;
-	}
+	return false;
+    }
     return true;
 }
 
