@@ -6,7 +6,7 @@ bool RoadRunner::network::packets::AddEntityPacket::deserialize_body(RakNet::Bit
     if (!stream->Read<int32_t>(this->entity_id)) {
         return false;
     }
-    if (!stream->Read<int32_t>(this->type)) {
+    if (!stream->Read<int8_t>(this->type)) {
         return false;
     }
     if (!stream->Read<float>(this->x)) {
@@ -25,11 +25,11 @@ bool RoadRunner::network::packets::AddEntityPacket::deserialize_body(RakNet::Bit
         return false;
     }
     if (!stream->Read<int16_t>(this->speed_y)) {
-	return false;
-    }
+		return false;
+	}
     if (!stream->Read<int16_t>(this->speed_z)) {
-	return false;
-    }
+		return false;
+	}
     return true;
 }
 

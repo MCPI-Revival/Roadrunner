@@ -12,7 +12,7 @@ namespace RoadRunner {
                 static const uint8_t packet_id;
 
                 int32_t entity_id;
-                int32_t type;
+                int8_t type;
                 float x;
                 float y;
                 float z;
