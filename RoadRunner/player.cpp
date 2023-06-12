@@ -85,7 +85,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
 
         StartGamePacket start_game;
         start_game.seed = SEED;
-        start_game.forceHasResourse = 0;
+        start_game.generator = 0;
         start_game.gamemode = IS_CREATIVE;
         start_game.entity_id = this->entity_id;
         start_game.x = SPAWN_X;
