@@ -12,7 +12,8 @@ namespace RoadRunner {
             class AddPlayerPacket {
             public:
                 static const uint8_t packet_id;
-                uint64_t client_guid;
+
+                uint64_t client_id;
                 RakNet::RakString username;
                 int32_t entity_id;
                 float x;
@@ -20,12 +21,12 @@ namespace RoadRunner {
                 float z;
                 int8_t pitch;
                 int8_t yaw;
-                uint16_t item_id = 0;
-                ;
-                uint16_t item_meta = 0;
+                int16_t item;
+                int16_t meta;
                 RoadRunner::network::types::MetadataType metadata;
 
                 bool deserialize_body(RakNet::BitStream *stream);
+
                 void serialize_body(RakNet::BitStream *stream);
             };
         }

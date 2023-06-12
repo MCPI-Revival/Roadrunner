@@ -4,6 +4,8 @@
 #include <iostream>
 #include <stdint.h>
 
+#include <network/types/metadata_type.hpp>
+
 namespace RoadRunner {
     namespace network {
         namespace packets {
@@ -12,11 +14,11 @@ namespace RoadRunner {
                 static const uint8_t packet_id;
 
                 int32_t entity_id;
-                int8_t type;
+                uint8_t type;
                 float x;
                 float y;
                 float z;
-                int32_t did;
+                int32_t has_motion;
                 int16_t speed_x;
                 int16_t speed_y;
                 int16_t speed_z;

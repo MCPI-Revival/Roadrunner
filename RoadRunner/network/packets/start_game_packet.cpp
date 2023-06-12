@@ -6,7 +6,7 @@ bool RoadRunner::network::packets::StartGamePacket::deserialize_body(RakNet::Bit
     if (!stream->Read<int32_t>(this->seed)) {
         return false;
     }
-    if (!stream->Read<int32_t>(this->forceHasResourse)) {
+    if (!stream->Read<int32_t>(this->generator)) {
         return false;
     }
     if (!stream->Read<int32_t>(this->gamemode)) {
@@ -29,7 +29,7 @@ bool RoadRunner::network::packets::StartGamePacket::deserialize_body(RakNet::Bit
 
 void RoadRunner::network::packets::StartGamePacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<int32_t>(this->seed);
-    stream->Write<int32_t>(this->forceHasResourse);
+    stream->Write<int32_t>(this->generator);
     stream->Write<int32_t>(this->gamemode);
     stream->Write<int32_t>(this->entity_id);
     stream->Write<float>(this->x);

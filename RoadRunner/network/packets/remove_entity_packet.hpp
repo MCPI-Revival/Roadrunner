@@ -4,8 +4,6 @@
 #include <iostream>
 #include <stdint.h>
 
-#include <network/types/metadata_type.hpp>
-
 namespace RoadRunner {
     namespace network {
         namespace packets {

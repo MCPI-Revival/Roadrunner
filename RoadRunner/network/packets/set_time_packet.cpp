@@ -3,7 +3,10 @@
 const uint8_t RoadRunner::network::packets::SetTimePacket::packet_id = 134;
 
 bool RoadRunner::network::packets::SetTimePacket::deserialize_body(RakNet::BitStream *stream) {
-    return stream->Read<int32_t>(this->time);
+    if (!stream->Read<int32_t>(this->time)) {
+        return false;
+    }
+    return true;
 }
 
 void RoadRunner::network::packets::SetTimePacket::serialize_body(RakNet::BitStream *stream) {

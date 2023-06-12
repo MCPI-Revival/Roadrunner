@@ -6,10 +6,10 @@ bool RoadRunner::network::packets::PlayerEquipmentPacket::deserialize_body(RakNe
     if (!stream->Read<int32_t>(this->entity_id)) {
         return false;
     }
-    if (!stream->Read<int16_t>(this->item_id)) {
+    if (!stream->Read<uint16_t>(this->block)) {
         return false;
     }
-    if (!stream->Read<int16_t>(this->data)) {
+    if (!stream->Read<uint16_t>(this->meta)) {
         return false;
     }
     return true;
@@ -17,6 +17,6 @@ bool RoadRunner::network::packets::PlayerEquipmentPacket::deserialize_body(RakNe
 
 void RoadRunner::network::packets::PlayerEquipmentPacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<int32_t>(this->entity_id);
-    stream->Write<int16_t>(this->item_id);
-    stream->Write<int16_t>(this->data);
+    stream->Write<uint16_t>(this->block);
+    stream->Write<uint16_t>(this->meta);
 }

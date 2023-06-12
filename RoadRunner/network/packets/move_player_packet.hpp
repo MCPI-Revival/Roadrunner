@@ -10,7 +10,8 @@ namespace RoadRunner {
             class MovePlayerPacket {
             public:
                 static const uint8_t packet_id;
-                int entity_id;
+
+                int32_t entity_id;
                 float x;
                 float y;
                 float z;
@@ -18,6 +19,7 @@ namespace RoadRunner {
                 float yaw;
 
                 bool deserialize_body(RakNet::BitStream *stream);
+
                 void serialize_body(RakNet::BitStream *stream);
             };
         }

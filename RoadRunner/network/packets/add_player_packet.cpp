@@ -3,7 +3,7 @@
 const uint8_t RoadRunner::network::packets::AddPlayerPacket::packet_id = 137;
 
 bool RoadRunner::network::packets::AddPlayerPacket::deserialize_body(RakNet::BitStream *stream) {
-    if (!stream->Read<uint64_t>(this->client_guid)) {
+    if (!stream->Read<uint64_t>(this->client_id)) {
         return false;
     }
     if (!this->username.Deserialize(stream)) {
@@ -27,17 +27,20 @@ bool RoadRunner::network::packets::AddPlayerPacket::deserialize_body(RakNet::Bit
     if (!stream->Read<int8_t>(this->yaw)) {
         return false;
     }
-    if (!stream->Read<uint16_t>(this->item_id)) {
+    if (!stream->Read<int16_t>(this->item)) {
         return false;
     }
-    if (!stream->Read<uint16_t>(this->item_meta)) {
+    if (!stream->Read<int16_t>(this->meta)) {
+        return false;
+    }
+    if (!this->metadata.deserialize(stream)) {
         return false;
     }
     return true;
 }
 
 void RoadRunner::network::packets::AddPlayerPacket::serialize_body(RakNet::BitStream *stream) {
-    stream->Write<uint64_t>(this->client_guid);
+    stream->Write<uint64_t>(this->client_id);
     this->username.Serialize(stream);
     stream->Write<int32_t>(this->entity_id);
     stream->Write<float>(this->x);
@@ -45,7 +48,7 @@ void RoadRunner::network::packets::AddPlayerPacket::serialize_body(RakNet::BitSt
     stream->Write<float>(this->z);
     stream->Write<int8_t>(this->pitch);
     stream->Write<int8_t>(this->yaw);
-    stream->Write<uint16_t>(this->item_id);
-    stream->Write<uint16_t>(this->item_meta);
+    stream->Write<int16_t>(this->item);
+    stream->Write<int16_t>(this->meta);
     this->metadata.serialize(stream);
 }

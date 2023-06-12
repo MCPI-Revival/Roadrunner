@@ -12,7 +12,7 @@ namespace RoadRunner {
                 static const uint8_t packet_id;
 
                 int32_t seed;
-                int32_t forceHasResourse;
+                int32_t generator;
                 int32_t gamemode;
                 int32_t entity_id;
                 float x;
