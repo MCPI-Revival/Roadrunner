@@ -13,7 +13,7 @@ namespace RoadRunner {
             public:
                 static const uint8_t packet_id;
 
-                uint64_t client_id;
+                uint64_t client_guid;
                 RakNet::RakString username;
                 int32_t entity_id;
                 float x;

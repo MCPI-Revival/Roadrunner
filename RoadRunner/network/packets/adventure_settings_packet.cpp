@@ -3,10 +3,7 @@
 const uint8_t RoadRunner::network::packets::AdventureSettingsPacket::packet_id = 182;
 
 bool RoadRunner::network::packets::AdventureSettingsPacket::deserialize_body(RakNet::BitStream *stream) {
-    if (!stream->Read<uint32_t>(this->flags)) {
-        return false;
-    }
-    return true;
+	return stream->Read<uint32_t>(this->flags);
 }
 
 void RoadRunner::network::packets::AdventureSettingsPacket::serialize_body(RakNet::BitStream *stream) {

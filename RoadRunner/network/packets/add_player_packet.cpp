@@ -3,7 +3,7 @@
 const uint8_t RoadRunner::network::packets::AddPlayerPacket::packet_id = 137;
 
 bool RoadRunner::network::packets::AddPlayerPacket::deserialize_body(RakNet::BitStream *stream) {
-    if (!stream->Read<uint64_t>(this->client_id)) {
+    if (!stream->Read<uint64_t>(this->client_guid)) {
         return false;
     }
     if (!this->username.Deserialize(stream)) {
@@ -40,7 +40,7 @@ bool RoadRunner::network::packets::AddPlayerPacket::deserialize_body(RakNet::Bit
 }
 
 void RoadRunner::network::packets::AddPlayerPacket::serialize_body(RakNet::BitStream *stream) {
-    stream->Write<uint64_t>(this->client_id);
+    stream->Write<uint64_t>(this->client_guid);
     this->username.Serialize(stream);
     stream->Write<int32_t>(this->entity_id);
     stream->Write<float>(this->x);
