@@ -39,7 +39,7 @@ Server::Server(uint16_t port, uint32_t max_clients) {
         packet = peer->Receive();
         if (!packet) continue;
         if (packet->bitSize != 0) {
-            RakNet::BitStream receive_stream(packet->data, packet->bitSize, false);
+            RakNet::BitStream receive_stream(packet->data, BITS_TO_BYTES(packet->bitSize), false);
 
             uint8_t packet_id;
             receive_stream.Read<uint8_t>(packet_id);
