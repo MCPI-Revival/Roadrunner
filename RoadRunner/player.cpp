@@ -1,4 +1,5 @@
 #include <config.hpp>
+#include <network/packets/send_inventory_packet.hpp>
 #include <network/packets/add_player_packet.hpp>
 #include <network/packets/animate_packet.hpp>
 #include <network/packets/chat_packet.hpp>
@@ -15,6 +16,7 @@
 #include <player.hpp>
 #include <world/perlin.hpp>
 
+using RoadRunner::network::packets::SendInventoryPacket;
 using RoadRunner::network::packets::AddPlayerPacket;
 using RoadRunner::network::packets::AnimatePacket;
 using RoadRunner::network::packets::ChatPacket;
@@ -148,7 +150,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         PlayerEquipmentPacket player_equipment;
         player_equipment.deserialize_body(stream);
         player_equipment.entity_id = this->entity_id;
-        this->broadcast_packet(player_equipment);
+        this->broadcast_except_packet(player_equipment);
     } else if (packet_id == MovePlayerPacket::packet_id) {
         MovePlayerPacket move_player;
         move_player.deserialize_body(stream);
@@ -201,6 +203,11 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
         this->z = move_player.z;
         this->pitch = move_player.pitch;
         this->yaw = move_player.yaw;
+    } else if (packet_id == SendInventoryPacket::packet_id) {
+        SendInventoryPacket send_inventory;
+        send_inventory.deserialize_body(stream);
+        ItemType some_item = send_inventory.items[0];
+        printf("ID: %i, AUX: %i, COUNT: %i\n", some_item.id, some_item.aux, some_item.count);
     } else if (packet_id == RequestChunkPacket::packet_id) {
         RequestChunkPacket request_chunk;
         request_chunk.deserialize_body(stream);
