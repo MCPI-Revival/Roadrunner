@@ -3,12 +3,7 @@
 #include <BitStream.h>
 #include <cstdint>
 #include <map>
-
-typedef struct {
-    int16_t block;
-    int8_t stack;
-    int16_t meta;
-} metadata_item_t;
+#include <network/types/item_type.hpp>
 
 typedef struct {
     int32_t x;
@@ -22,7 +17,7 @@ typedef struct {
     int32_t i;
     float f;
     RakNet::RakString str;
-    metadata_item_t item;
+    RoadRunner::network::types::ItemType item;
     metadata_vec_t vector;
 } metadata_value_t;
 

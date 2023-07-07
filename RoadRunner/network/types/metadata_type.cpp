@@ -44,14 +44,14 @@ bool RoadRunner::network::types::MetadataType::deserialize(RakNet::BitStream *st
             break;
         case 5:
             stream->EndianSwapBytes(BITS_TO_BYTES(stream->GetReadOffset()), 2);
-            if (!stream->Read<int16_t>(value.item.block)) {
+            if (!stream->Read<int16_t>(value.item.id)) {
                 return false;
             }
-            if (!stream->Read<int8_t>(value.item.stack)) {
+            if (!stream->Read<uint8_t>(value.item.count)) {
                 return false;
             }
             stream->EndianSwapBytes(BITS_TO_BYTES(stream->GetReadOffset()), 2);
-            if (!stream->Read<int16_t>(value.item.meta)) {
+            if (!stream->Read<int16_t>(value.item.aux)) {
                 return false;
             }
             break;
@@ -104,10 +104,10 @@ void RoadRunner::network::types::MetadataType::serialize(RakNet::BitStream *stre
             stream->EndianSwapBytes(BITS_TO_BYTES(stream->GetWriteOffset()) - 2 - id_with_type.second.str.GetLength(), 2);
             break;
         case 5:
-            stream->Write<int16_t>(id_with_type.second.item.block);
+            stream->Write<int16_t>(id_with_type.second.item.id);
             stream->EndianSwapBytes(BITS_TO_BYTES(stream->GetWriteOffset()) - 2, 2);
-            stream->Write<int8_t>(id_with_type.second.item.stack);
-            stream->Write<int16_t>(id_with_type.second.item.meta);
+            stream->Write<uint8_t>(id_with_type.second.item.count);
+            stream->Write<int16_t>(id_with_type.second.item.aux);
             stream->EndianSwapBytes(BITS_TO_BYTES(stream->GetWriteOffset()) - 2, 2);
             break;
         case 6:
