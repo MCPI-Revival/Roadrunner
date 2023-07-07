@@ -9,10 +9,14 @@ bool RoadRunner::network::packets::ContainerAckPacket::deserialize_body(RakNet::
     if (!stream->Read<int16_t>(this->unknown_1)) {
         return false;
     }
+    if (!stream->Read<bool>(this->unknown_2)) {
+        return false;
+    }
     return true;
 }
 
 void RoadRunner::network::packets::ContainerAckPacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<uint8_t>(this->window_id);
     stream->Write<int16_t>(this->unknown_1);
+    stream->Write<bool>(this->unknown_2);
 }

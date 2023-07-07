@@ -13,6 +13,7 @@ namespace RoadRunner {
 
                 uint8_t window_id;
                 int16_t unknown_1;
+                bool unknown_2;
 
                 bool deserialize_body(RakNet::BitStream *stream);
 
