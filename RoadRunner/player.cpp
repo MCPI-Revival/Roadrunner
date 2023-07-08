@@ -13,6 +13,8 @@
 #include <network/packets/remove_player_packet.hpp>
 #include <network/packets/request_chunk_packet.hpp>
 #include <network/packets/start_game_packet.hpp>
+#include <network/enums/ready_status_enum.hpp>
+#include <network/enums/login_status_enum.hpp>
 #include <player.hpp>
 #include <world/perlin.hpp>
 
@@ -30,6 +32,8 @@ using RoadRunner::network::packets::ReadyPacket;
 using RoadRunner::network::packets::RemovePlayerPacket;
 using RoadRunner::network::packets::RequestChunkPacket;
 using RoadRunner::network::packets::StartGamePacket;
+using RoadRunner::network::enums::ReadyStatusEnum;
+using RoadRunner::network::enums::LoginStatusEnum;
 using RoadRunner::world::Perlin;
 
 template <typename T>
@@ -82,7 +86,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
 
         // Continue the login sequence
         LoginStatusPacket login_status;
-        login_status.status = 0;
+        login_status.status = (int32_t)LoginStatusEnum::success;
         this->send_packet(login_status);
 
         StartGamePacket start_game;
@@ -97,7 +101,7 @@ void RoadRunner::Player::handle_packet(uint8_t packet_id, RakNet::BitStream *str
     } else if (packet_id == ReadyPacket::packet_id) {
         ReadyPacket ready_packet;
         ready_packet.deserialize_body(stream);
-        if (ready_packet.status != 1) return;
+        if (ready_packet.status != (uint8_t)ReadyStatusEnum::ready_client_generation) return;
         // Join game message
         printf("%s has joined the game\n", this->username.c_str());
         this->server->post_to_chat(this->username + " has joined!");
