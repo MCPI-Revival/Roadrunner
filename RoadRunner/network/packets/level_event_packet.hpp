@@ -7,6 +7,11 @@
 namespace RoadRunner {
     namespace network {
         namespace packets {
+            enum class LevelEventId {
+                random_door_sound = 1003,
+                all_players_sleep = 9800
+            };
+
             class LevelEventPacket {
             public:
                 static const uint8_t packet_id;
