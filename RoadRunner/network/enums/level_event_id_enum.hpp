@@ -1,3 +1,5 @@
+#pragma once
+
 namespace RoadRunner {
     namespace network {
         namespace enums {
