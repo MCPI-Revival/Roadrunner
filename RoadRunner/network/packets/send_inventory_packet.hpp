@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <stdint.h>
+#include <cstdint>
 #include <BitStream.h>
 #include <network/types/item_type.hpp>
 #include <vector>

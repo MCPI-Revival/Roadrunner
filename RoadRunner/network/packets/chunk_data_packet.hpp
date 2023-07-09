@@ -2,7 +2,7 @@
 
 #include <BitStream.h>
 #include <iostream>
-#include <stdint.h>
+#include <cstdint>
 #include <world/chunk.hpp>
 
 namespace RoadRunner {

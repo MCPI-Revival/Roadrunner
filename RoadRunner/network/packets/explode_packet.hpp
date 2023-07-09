@@ -3,17 +3,23 @@
 #include <BitStream.h>
 #include <iostream>
 #include <cstdint>
+#include <vector>
+#include <network/types/record_type.hpp>
+
+using RoadRunner::network::types::RecordType;
 
 namespace RoadRunner {
     namespace network {
         namespace packets {
-            class ContainerAckPacket {
+            class ExplodePacket {
             public:
                 static const uint8_t packet_id;
 
-                uint8_t window_id;
-                int16_t unknown_1;
-                bool unknown_2;
+                float x;
+                float y;
+                float z;
+                float radius;
+                std::vector<RecordType> records;
 
                 bool deserialize_body(RakNet::BitStream *stream);
 
