@@ -21,14 +21,16 @@ bool RoadRunner::network::packets::AddEntityPacket::deserialize_body(RakNet::Bit
     if (!stream->Read<int32_t>(this->has_motion)) {
         return false;
     }
-    if (!stream->Read<int16_t>(this->speed_x)) {
-        return false;
-    }
-    if (!stream->Read<int16_t>(this->speed_y)) {
-        return false;
-    }
-    if (!stream->Read<int16_t>(this->speed_z)) {
-        return false;
+    if (this->has_motion > 0) {
+        if (!stream->Read<int16_t>(this->speed_x)) {
+            return false;
+        }
+        if (!stream->Read<int16_t>(this->speed_y)) {
+            return false;
+        }
+        if (!stream->Read<int16_t>(this->speed_z)) {
+            return false;
+        }
     }
     return true;
 }
@@ -40,7 +42,9 @@ void RoadRunner::network::packets::AddEntityPacket::serialize_body(RakNet::BitSt
     stream->Write<float>(this->y);
     stream->Write<float>(this->z);
     stream->Write<int32_t>(this->has_motion);
-    stream->Write<int16_t>(this->speed_x);
-    stream->Write<int16_t>(this->speed_y);
-    stream->Write<int16_t>(this->speed_z);
+    if (this->has_motion > 0) {
+        stream->Write<int16_t>(this->speed_x);
+        stream->Write<int16_t>(this->speed_y);
+        stream->Write<int16_t>(this->speed_z);
+    }
 }
