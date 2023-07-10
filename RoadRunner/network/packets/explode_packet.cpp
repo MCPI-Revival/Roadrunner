@@ -15,10 +15,11 @@ bool RoadRunner::network::packets::ExplodePacket::deserialize_body(RakNet::BitSt
     if (!stream->Read<float>(this->radius)) {
         return false;
     }
-    uint32_t record_count;
+    uint32_t record_count = 0;
     if (!stream->Read<uint32_t>(record_count)) {
         return false;
     }
+    this->records.clear();
     for (uint32_t i = 0; i < record_count; ++i) {
         RecordType record;
         if (!record.deserialize(stream)) {
@@ -35,7 +36,7 @@ void RoadRunner::network::packets::ExplodePacket::serialize_body(RakNet::BitStre
     stream->Write<float>(this->z);
     stream->Write<float>(this->radius);
     stream->Write<uint32_t>(this->records.size());
-    for (uint32_t i = 0; i < this->records.size(); ++i) {
+    for (size_t i = 0; i < this->records.size(); ++i) {
         this->records[i].serialize(stream);
     }
 }

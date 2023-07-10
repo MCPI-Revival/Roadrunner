@@ -13,14 +13,14 @@ bool RoadRunner::network::packets::SendInventoryPacket::deserialize_body(RakNet:
     if (!stream->Read<int16_t>(count)) {
         return false;
     }
-    items.clear();
+    this->items.clear();
     // +4 because of armor slots
     for (int i = 0; i < count + 4; i++) {
         ItemType new_item;
         if (!new_item.deserialize(stream)) {
             return false;
         }
-        items.push_back(new_item);
+        this->items.push_back(new_item);
     }
     return true;
 }
