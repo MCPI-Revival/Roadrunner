@@ -11,6 +11,7 @@ namespace RoadRunner {
 
     class Server {
     public:
+        bool is_running;
         RakNet::RakPeerInterface *peer;
         std::map<RakNet::RakNetGUID, RoadRunner::Player *> players;
         int32_t entity_id;

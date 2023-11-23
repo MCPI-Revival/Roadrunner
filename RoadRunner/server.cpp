@@ -24,6 +24,7 @@ void Server::post_to_chat(std::string message) {
 Server::Server(uint16_t port, uint32_t max_clients) {
     this->entity_id = 1;
     this->peer = RakNet::RakPeerInterface::GetInstance();
+    this->is_running = true;
 
     RakNet::Packet *packet;
 
@@ -35,7 +36,12 @@ Server::Server(uint16_t port, uint32_t max_clients) {
     peer->SetMaximumIncomingConnections(max_clients);
 
     EntityIDGenerator idGen;
-    while (1) {
+    while (this->is_running) {
+        RakNet::RakString data = "MCCPP;MINECON;Test";
+        RakNet::BitStream stream;
+        data.Serialize(&stream);
+        peer->SetOfflinePingResponse((const char *)stream.GetData(), stream.GetNumberOfBytesUsed());
+
         packet = peer->Receive();
         if (!packet) continue;
         if (packet->bitSize != 0) {
