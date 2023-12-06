@@ -23,6 +23,7 @@ bool RoadRunner::network::packets::ContainerSetContentPacket::deserialize_body(R
 
 void RoadRunner::network::packets::ContainerSetContentPacket::serialize_body(RakNet::BitStream *stream) {
     stream->Write<uint8_t>(this->window_id);
+    stream->Write<int16_t>(this->items.size());
     for (size_t i = 0; i < this->items.size(); ++i) {
         this->items[i].serialize(stream);
     }
