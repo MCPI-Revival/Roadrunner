@@ -2,14 +2,14 @@
 #include <MessageIdentifiers.h>
 #include <PacketPriority.h>
 
-#include <network/packets/message_packet.hpp>
+#include <network/packets/chat_packet.hpp>
 #include <server.hpp>
 
 using RoadRunner::Server;
-using RoadRunner::network::packets::MessagePacket;
+using RoadRunner::network::packets::ChatPacket;
 
 void Server::post_to_chat(std::string message) {
-    MessagePacket msg;
+    ChatPacket msg;
     msg.message = message.c_str();
     RakNet::BitStream send_stream;
     send_stream.Write<uint8_t>(msg.packet_id);
