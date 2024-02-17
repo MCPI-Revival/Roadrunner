@@ -2,6 +2,8 @@
 
 RoadRunner::nbt::tag::Int::Int() {
     this->id = TagIdentifiers::INT;
+    this->name = "";
+    this->value = 0;
 }
 
 bool RoadRunner::nbt::tag::Int::read(RakNet::BitStream *stream) {

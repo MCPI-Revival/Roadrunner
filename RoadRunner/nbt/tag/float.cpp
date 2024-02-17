@@ -2,6 +2,8 @@
 
 RoadRunner::nbt::tag::Float::Float() {
     this->id = TagIdentifiers::FLOAT;
+    this->name = "";
+    this->value = 0.0f;
 }
 
 bool RoadRunner::nbt::tag::Float::read(RakNet::BitStream *stream) {

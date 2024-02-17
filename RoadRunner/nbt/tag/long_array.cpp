@@ -7,12 +7,13 @@ using RoadRunner::nbt::tag::Long;
 
 RoadRunner::nbt::tag::LongArray::LongArray() {
     this->id = TagIdentifiers::LONG_ARRAY;
+    this->name = "";
     this->value = nullptr;
 }
 
 RoadRunner::nbt::tag::LongArray::~LongArray() {
     if (this->value != nullptr) {
-        delete this->value;
+        delete[] this->value;
         this->value = nullptr;
         this->size = 0;
     }
@@ -28,7 +29,7 @@ bool RoadRunner::nbt::tag::LongArray::read(RakNet::BitStream *stream) {
     for (int32_t i = 0; i < this->size; ++i) {
         Long valueTag;
         if (!valueTag.read(stream)) {
-            delete this->value;
+            delete[] this->value;
             this->value = nullptr;
             this->size = 0;
             return false;

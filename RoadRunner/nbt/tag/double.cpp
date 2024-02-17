@@ -2,6 +2,8 @@
 
 RoadRunner::nbt::tag::Double::Double() {
     this->id = TagIdentifiers::DOUBLE;
+    this->name = "";
+    this->value = 0.0;
 }
 
 bool RoadRunner::nbt::tag::Double::read(RakNet::BitStream *stream) {

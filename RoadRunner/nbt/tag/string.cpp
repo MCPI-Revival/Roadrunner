@@ -2,6 +2,7 @@
 
 RoadRunner::nbt::tag::String::String() {
     this->id = TagIdentifiers::STRING;
+    this->name = "";
 }
 
 bool RoadRunner::nbt::tag::String::read(RakNet::BitStream *stream) {

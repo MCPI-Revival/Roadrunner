@@ -5,12 +5,13 @@ using RoadRunner::nbt::tag::Int;
 
 RoadRunner::nbt::tag::IntArray::IntArray() {
     this->id = TagIdentifiers::INT_ARRAY;
+    this->name = "";
     this->value = nullptr;
 }
 
 RoadRunner::nbt::tag::IntArray::~IntArray() {
     if (this->value != nullptr) {
-        delete this->value;
+        delete[] this->value;
         this->value = nullptr;
         this->size = 0;
     }
@@ -26,7 +27,7 @@ bool RoadRunner::nbt::tag::IntArray::read(RakNet::BitStream *stream) {
     for (int32_t i = 0; i < this->size; ++i) {
         Int valueTag;
         if (!valueTag.read(stream)) {
-            delete this->value;
+            delete[] this->value;
             this->value = nullptr;
             this->size = 0;
             return false;

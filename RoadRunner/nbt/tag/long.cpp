@@ -2,6 +2,8 @@
 
 RoadRunner::nbt::tag::Long::Long() {
     this->id = TagIdentifiers::LONG;
+    this->name = "";
+    this->value = 0;
 }
 
 bool RoadRunner::nbt::tag::Long::read(RakNet::BitStream *stream) {
